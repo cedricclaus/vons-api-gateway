@@ -1,0 +1,16 @@
+version: '2'
+services:
+  vonsapigateway-mongodb:
+    image: mongo:4.0.9
+    ports:
+      - '27017:27017'
+    command: mongos --configdb vonsapigateway-mongodb-config
+  vonsapigateway-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  vonsapigateway-mongodb-config:
+    image: mongo:4.0.9
+    container_name: vonsapigateway-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
